@@ -48,13 +48,27 @@ public class PersonaTest {
         int nAmigos = persona.getAmigos().size();
 
         Assertions.assertNotNull(amigo, "El amigo no puede ser null");
+        Assertions.assertFalse(persona.getAmigos().contains(amigo), "No se puede tener 2 veces el mismo amigo");
 
         persona.getAmigos().add(amigo);
         Assertions.assertFalse(persona.getAmigos().isEmpty(), "La lista de amigos esta vacia");
         Assertions.assertEquals(nAmigos + 1, persona.getAmigos().size(), "El numero de amigos de la persona no coincide con el numero esperado");
     }
 
+    @Test
+    @DisplayName("Verifica que se puedan eliminar amigos")
+    public void testEliminarAmigo() {
+        Persona amigo = new Persona(2L, "Maria", "Gomez", "mariagomez@gmail.com", 27);
+
+        Assertions.assertNotNull(amigo, "El amigo no puede ser null");
+        persona.getAmigos().add(amigo);
+
+        persona.getAmigos().remove(amigo);
+        Assertions.assertFalse(persona.getAmigos().contains(amigo));
+    }
+
     @TestFactory
+    @DisplayName("Verifica que un grupo de personas puedan agregarse como amigos")
     public Stream<DynamicTest> testAgregarAmigos() {
         List<Persona> nuevosAmigos = List.of(
                 new Persona(2L, "Maria", "Gomez", "mariagomez@gmail.com", 27),
