@@ -4,6 +4,9 @@ import org.example.entity.Persona;
 import org.example.entity.Tarea;
 import org.junit.jupiter.api.*;
 
+import java.util.List;
+import java.util.stream.Stream;
+
 public class PersonaTest {
     private Persona persona;
 
@@ -49,5 +52,23 @@ public class PersonaTest {
         persona.getAmigos().add(amigo);
         Assertions.assertFalse(persona.getAmigos().isEmpty(), "La lista de amigos esta vacia");
         Assertions.assertEquals(nAmigos + 1, persona.getAmigos().size(), "El numero de amigos de la persona no coincide con el numero esperado");
+    }
+
+    @TestFactory
+    public Stream<DynamicTest> testAgregarAmigos() {
+        List<Persona> nuevosAmigos = List.of(
+                new Persona(2L, "Maria", "Gomez", "mariagomez@gmail.com", 27),
+                new Persona(3L, "Jose", "Pereira", "josepereira@gmail.com", 32),
+                new Persona(4L, "Enrique", "Gomez", "enrique@gmail.com", 18)
+        );
+
+        nuevosAmigos.forEach(persona.getAmigos()::add);
+
+        return nuevosAmigos.stream()
+                .map(amigo -> DynamicTest.dynamicTest(
+                        amigo.toString(),
+                        () -> Assertions.assertTrue(persona.getAmigos().contains(amigo),
+                                "El amigo " + amigo.getNombre() + " no se encuentra en la lista")
+                ));
     }
 }
