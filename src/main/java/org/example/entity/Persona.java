@@ -28,6 +28,17 @@ public class Persona {
         this.tareas = new LinkedList<>();
     }
 
+    public Persona(Long id, String nombre, String apellido, String email, int edad) {
+        this.id = id;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.fechaNacimiento = LocalDate.now();
+        this.edad = edad;
+        this.amigos = new ArrayList<>();
+        this.tareas = new LinkedList<>();
+    }
+
     public Long getId() {
         return id;
     }
@@ -100,5 +111,9 @@ public class Persona {
     // metodos
     public int calcularEdad() {
         return LocalDate.now().getYear() - fechaNacimiento.getYear();
+    }
+
+    public boolean esMayorDeEdad() {
+        return this.edad >= 18;
     }
 }

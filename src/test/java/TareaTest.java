@@ -1,7 +1,6 @@
-package org.example;
-
 import org.example.entity.Tarea;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import java.time.LocalDate;
 
@@ -31,6 +30,14 @@ public class TareaTest {
     @DisplayName("Verifica que se actualice el nombre de la tarea")
     public void testActualizarNombre() {
         tarea.setNombre("estudiar");
-        Assertions.assertEquals("estudia", tarea.getNombre(), "No se actualizo el nombre de la tarea");
+        Assertions.assertEquals("estudiar", tarea.getNombre(), "No se actualizo el nombre de la tarea");
+    }
+
+    @Test
+    @DisplayName("Verifica que se actualice la descripcion de la tarea")
+    public void testActualizarDescripcion() {
+        String nuevaDescripcion = "estudiar 6hs, 2 antes de comer y 4 despues de comer";
+       tarea.setDescripcion(nuevaDescripcion);
+       Assertions.assertEquals(nuevaDescripcion, tarea.getDescripcion(), "La descripcion no se actualizo");
     }
 }

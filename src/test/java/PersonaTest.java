@@ -1,8 +1,10 @@
-package org.example;
-
 import org.example.entity.Persona;
 import org.example.entity.Tarea;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -87,6 +89,7 @@ public class PersonaTest {
         Assertions.assertFalse(persona.getAmigos().contains(amigo), "El amigo no se elimino");
     }
 
+    // TESTS DINÁMICOS
     @TestFactory
     @DisplayName("Verifica que un grupo de personas puedan agregarse como amigos")
     public Stream<DynamicTest> testAgregarAmigos() {
@@ -126,5 +129,32 @@ public class PersonaTest {
                     persona.getAmigos().remove(amigo);
                     Assertions.assertFalse(persona.getAmigos().contains(amigo), "El amigo no fue eliminado correctamente");
                 }));
+    }
+
+    // TESTS PARAMETRIZADOS (se necesita junit-jupiter-params como dependencia en el pom.xml)
+
+    // Opción 1, @ValuesSource
+    @ParameterizedTest
+    @ValueSource(ints = {24, 26, 18, 20, 22})
+    public void testMayorDeEdad(int edad) {
+        Persona p = new Persona(5L, "Jennifer", "Lawrence", "katnisseverdeen@gmail.com", edad);
+        Assertions.assertTrue(p.esMayorDeEdad(), "La edad: " + edad + " no es >= 18");
+    }
+
+    // Opción 2, @MethodSource
+    @ParameterizedTest
+    @MethodSource("proveedorDeDatos")
+    public void testEsMayorDeEdadConProveedor(Long id, String nombre, String apellido, String email, int edad) {
+        Persona p = new Persona(id, nombre, apellido, email, edad);
+        Assertions.assertTrue(p.esMayorDeEdad(), "La edad: " + edad + " no es >= 18");
+    }
+
+    public static Stream<Arguments> proveedorDeDatos() {
+        return Stream.of(
+                Arguments.of(6L, "Josh", "Hutcherson", "peetamellark@gmail.com", 18),
+                Arguments.of(7L, "Andy", "Samberg", "jakeperalta@gmail.com", 22),
+                Arguments.of(8L, "Melissa", "Fumero", "amysantiago@gmail.com", 22),
+                Arguments.of(9L, "Joe", "Lo Truglio", "charlesboyle@gmail.com", 27)
+        );
     }
 }
