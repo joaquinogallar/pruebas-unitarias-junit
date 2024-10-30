@@ -25,12 +25,12 @@ public class PersonaTest {
     @DisplayName("Verifica que la persona se creo con éxito")
     public void testCrearPersona() {
         Assertions.assertNotNull(persona, "La persona dada no existe");
-        Assertions.assertNotNull(persona.getTareas(), "La lista de tareas no puede ser null");
-        Assertions.assertNotNull(persona.getNombre(), "El nombre no puede ser null");
-        Assertions.assertNotNull(persona.getApellido(), "El apellido no puede ser null");
-        Assertions.assertTrue(persona.getTareas().isEmpty(), "La lista de tareas debe estar vacia");
-        Assertions.assertFalse(persona.getEdad() < 0, "La persona no puede tener una edad negativa");
-        Assertions.assertTrue(persona.getEmail().contains("@"), "Formato de email no valido");
+        Assertions.assertNotNull(persona.getTareas(), "La lista de tareas es null");
+        Assertions.assertNotNull(persona.getNombre(), "El nombre es null");
+        Assertions.assertNotNull(persona.getApellido(), "El apellido es null");
+        Assertions.assertTrue(persona.getTareas().isEmpty(), "La lista de tareas no esta vacia");
+        Assertions.assertFalse(persona.getEdad() < 0, "La persona tiene una edad negativa");
+        Assertions.assertTrue(persona.getEmail().contains("@"), "Formato de email invalido");
     }
 
     @Test
@@ -107,5 +107,24 @@ public class PersonaTest {
                             System.out.println(amigo.getNombre() + " tiene: " + amigo.getEdad());
                         }
                 ));
+    }
+
+    @TestFactory
+    @DisplayName("Verifica que un grupo de personas puedan ser eliminadas de la lista de amigos")
+    public Stream<DynamicTest> testEliminarAmigos() {
+        List<Persona> nuevosAmigos = List.of(
+                new Persona(2L, "Maria", "Gomez", "mariagomez@gmail.com", LocalDate.of(1999, 3, 2)),
+                new Persona(3L, "Jose", "Pereira", "josepereira@gmail.com", LocalDate.of(2000, 5, 22)),
+                new Persona(4L, "Enrique", "Gomez", "enrique@gmail.com", LocalDate.of(2003, 1, 15))
+        );
+
+        nuevosAmigos.forEach(persona.getAmigos()::add);
+
+        return nuevosAmigos.stream()
+                .map(amigo -> DynamicTest.dynamicTest(amigo.toString(), () -> {
+                    Assertions.assertTrue(persona.getAmigos().contains(amigo), "El amigo existe");
+                    persona.getAmigos().remove(amigo);
+                    Assertions.assertFalse(persona.getAmigos().contains(amigo), "El amigo no fue eliminado correctamente");
+                }));
     }
 }

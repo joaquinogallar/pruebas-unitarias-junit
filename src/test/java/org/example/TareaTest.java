@@ -1,8 +1,9 @@
 package org.example;
 
 import org.example.entity.Tarea;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.*;
+
+import java.time.LocalDate;
 
 public class TareaTest {
     private Tarea tarea;
@@ -17,5 +18,19 @@ public class TareaTest {
         tarea = null;
     }
 
+    @Test
+    @DisplayName("Verifica que la tarea se crea correctamente")
+    public void testCreaTarea() {
+        Assertions.assertNotNull(tarea, "La tarea es null");
+        Assertions.assertNotNull(tarea.getNombre(), "El nombre de la tarea es null");
+        Assertions.assertNotNull(tarea.getDescripcion(), "La descripcion de la tarea es null");
+        Assertions.assertEquals(LocalDate.now(), tarea.getFechaInicio(), "La fecha de inicio debería ser la fecha actual");
+    }
 
+    @Test
+    @DisplayName("Verifica que se actualice el nombre de la tarea")
+    public void testActualizarNombre() {
+        tarea.setNombre("estudiar");
+        Assertions.assertEquals("estudia", tarea.getNombre(), "No se actualizo el nombre de la tarea");
+    }
 }
