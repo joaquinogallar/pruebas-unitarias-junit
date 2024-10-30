@@ -3,6 +3,7 @@ import org.example.entity.Tarea;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -156,5 +157,17 @@ public class PersonaTest {
                 Arguments.of(8L, "Melissa", "Fumero", "amysantiago@gmail.com", 22),
                 Arguments.of(9L, "Joe", "Lo Truglio", "charlesboyle@gmail.com", 27)
         );
+    }
+
+    // Opción 3, @CsvSource
+    @ParameterizedTest
+    @CsvSource({
+            "Travis, Fimmel, ragnardlodbrok@gmail.com, 32",
+            "Greta, Thungberg, gretathungber@gmail.com, 19",
+            "Wentworth, Miller, michaelscofield@gmail.com, 25",
+    })
+    public void testMayorDeEdadConFormatoCsv(String nombre, String apellido, String email, int edad) {
+        Persona p = new Persona(10L, nombre, apellido, email, edad);
+        Assertions.assertTrue(p.esMayorDeEdad(), "La edad: " + edad + " no es >= 18");
     }
 }
