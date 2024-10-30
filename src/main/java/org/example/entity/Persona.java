@@ -17,13 +17,13 @@ public class Persona {
     private List<Persona> amigos;
     private Queue<Tarea> tareas;
 
-    public Persona(Long id, String nombre, String apellido, String email, int edad) {
+    public Persona(Long id, String nombre, String apellido, String email, LocalDate fechaNacimiento) {
         this.id = id;
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;
-        this.fechaNacimiento = LocalDate.now();
-        this.edad = edad;
+        this.fechaNacimiento = fechaNacimiento;
+        this.edad = calcularEdad();
         this.amigos = new ArrayList<>();
         this.tareas = new LinkedList<>();
     }
@@ -95,5 +95,10 @@ public class Persona {
                 ", amigos=" + amigos +
                 ", tareas=" + tareas +
                 '}';
+    }
+
+    // metodos
+    public int calcularEdad() {
+        return LocalDate.now().getYear() - fechaNacimiento.getYear();
     }
 }
